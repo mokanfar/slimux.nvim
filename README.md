@@ -1,23 +1,21 @@
 # slimux.nvim
 
-Send content from the current Neovim buffer to a configurable tmux pane.
+Send cursor_line from the current Neovim buffer to a configurable tmux pane.
 
 ## Example setup (and installation)
 Via [lazy](https://github.com/folke/lazy.nvim):
 ```lua
 require("lazy").setup({
   {
-    'EvWilson/slimux.nvim',
+    'mokanfar/slimux.nvim',
     config = function()
       local slimux = require('slimux')
       slimux.setup({
         target_socket = slimux.get_tmux_socket(),
         target_pane = string.format('%s.2', slimux.get_tmux_window()),
       })
-      vim.keymap.set('v', '<leader>r', ':lua require("slimux").send_highlighted_text()<CR>',
-        { desc = 'Send currently highlighted text to configured tmux pane' })
-      vim.keymap.set('n', '<leader>r', ':lua require("slimux").send_paragraph_text()<CR>',
-        { desc = 'Send paragraph under cursor to configured tmux pane' })
+      vim.keymap.set('v', '<leader>r', ':lua require("slimux").capture_current_line_text()<<CR>',
+        { desc = 'Send current line where cursor is on to tmux window number' })
     end
   }
 })
@@ -36,18 +34,3 @@ escaped_strings = { '\\', ';', '"', '$', '\'' }
 For more detail on specifying tmux command targets, check out the documentation included with the project: https://github.com/tmux/tmux/wiki/Advanced-Use#command-targets
 
 Also, a reminder that pane numbers can be shown via `prefix + q`, which in a standard install will be `C-b + q`.
-
-Additional available functions:
-```
-send_highlighted_text_with_delay_ms(delay)
-  Parameters:
-    - delay: a delay between each printed character, specified in milliseconds
-  Description:
-    This function will send the highlighted text to the configured target, with the given delay between each character sent. This can be useful for e.g. instructional applications, or a LMGTFY presentational panache.
-  Note:
-    This function does block, so the editor UI will be frozen until the command completes. Have a care with long strings and high delays.
-
-send_paragraph_text_with_delay_ms(delay)
-  Description:
-    Same as the above, but for captured paragraph text.
-```
