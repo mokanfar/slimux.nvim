@@ -12,10 +12,12 @@ require("lazy").setup({
       local slimux = require('slimux')
       slimux.setup({
         target_socket = slimux.get_tmux_socket(),
+
+        -- This is targetting tmux window 2 and will send command there
         target_pane = string.format('%s.2', slimux.get_tmux_window()),
       })
-      vim.keymap.set('n', '<leader>r', ':lua require("slimux").capture_current_line_text()<<CR>',
-        { desc = 'Send current line where cursor is on to tmux window number' })
+      vim.keymap.set('n', '<leader>r', ':lua require("slimux").capture_current_line_text()<CR>',
+        { desc = 'Send cursor_line as cmd to a tmux window' })
     end
   }
 })
